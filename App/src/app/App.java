@@ -45,12 +45,14 @@ public class App {
         }
     }
     
-    public Struct[] skaitymas(String failas){
+    public List<List<Struct>> skaitymas(String failas){
+        List<List<Struct>> ret = new ArrayList<>();
         String[] duomenai = readLines("duomenys.txt");
-        Struct[] duomenys = new Struct[duomenai.length];
-        for(int i = 0; i < duomenys.length; i++)
-            duomenys[i] = new Struct(duomenai[i]);
-        return duomenys;
+        List<Struct> tmp = new ArrayList<>();
+        for(int i = 0; i < duomenai.length; i++){
+            
+        }
+        return ret;
     }
     
     public void spausdinti(Struct[] duomenai, String prefix){
@@ -61,6 +63,7 @@ public class App {
     
     public void otherMain(){
         int procesuSkaicius = 3;
+        List<Struct[]> sagsag = new ArrayList<>();
         final Struct[] duomenys = skaitymas("duomenys.txt");
         String[] procesaiTmp = new String[procesuSkaicius];
         for(int i = 0; i < procesuSkaicius; i++){
