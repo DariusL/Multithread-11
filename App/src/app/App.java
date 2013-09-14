@@ -29,6 +29,17 @@ public class App {
         }
     }
     
+    private abstract class SuperRunnable implements Runnable{
+    	private int nr;
+    	SuperRunnable(int nr){
+    		this.nr = nr;
+    	}
+    	
+    	public int getNr(){
+    		return nr;
+    	}
+    }
+    
     public static String[] readLines(String filename){
         try{
             FileReader fileReader = new FileReader(filename);
@@ -45,42 +56,43 @@ public class App {
         }
     }
     
-    public List<List<Struct>> skaitymas(String failas){
-        List<List<Struct>> ret = new ArrayList<>();
-        String[] duomenai = readLines("duomenys.txt");
-        List<Struct> tmp = new ArrayList<>();
+    public ArrayList<ArrayList<Struct>> skaitymas(String failas){
+    	ArrayList<ArrayList<Struct>> ret = new ArrayList<>();
+        String[] duomenai = readLines(failas);
+        ArrayList<Struct> tmp = new ArrayList<>();
         for(int i = 0; i < duomenai.length; i++){
+            if(duomenai[i].charAt(0) == ' '){
+            	ret.add(tmp);
+            	tmp = new ArrayList<>();
+            }else{
+            	tmp.add(new Struct(duomenai[i]));
+            }
             
         }
         return ret;
     }
     
-    public void spausdinti(Struct[] duomenai, String prefix){
+    public void spausdinti(ArrayList<Struct> duomenai, String prefix){
         System.out.print(antraste());
-        for(int i = 0; i < duomenai.length; i++)
-            System.out.println(prefix + i + " " + duomenai[i].toString());
+        for(int i = 0; i < duomenai.size(); i++)
+            System.out.println(prefix + i + " " + duomenai.get(i).toString());
     }
     
     public void otherMain(){
-        int procesuSkaicius = 3;
-        List<Struct[]> sagsag = new ArrayList<>();
-        final Struct[] duomenys = skaitymas("duomenys.txt");
-        String[] procesaiTmp = new String[procesuSkaicius];
-        for(int i = 0; i < procesuSkaicius; i++){
-            procesaiTmp[i] = "Procesas" + i + " ";
-        }
-        final String[] procesuPav = procesaiTmp;
-        List<Thread> procesai = new ArrayList(procesuSkaicius);
+    	final ArrayList<ArrayList<Struct>> duomenys = skaitymas("duomenys.txt");
+    	final int procesuSkaicius = duomenys.size();
+
+        List<Thread> procesai = new ArrayList<>(procesuSkaicius);
         antraste();
-        spausdinti(duomenys, "");
+        for(ArrayList<Struct> a : duomenys)
+        	spausdinti(a, "");
         System.out.print("\n\n\n");
         for(int i = 0; i < procesuSkaicius; i++){
-            final int nr = i;
-            procesai.add(new Thread(new Runnable() {
+            procesai.add(new Thread(new SuperRunnable(i) {
 
                 @Override
                 public void run() {
-                    spausdinti(duomenys, procesuPav[nr]);
+                    spausdinti(duomenys.get(getNr()), "Procesas " + getNr());
                 }
             }));
         }
