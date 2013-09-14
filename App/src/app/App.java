@@ -61,7 +61,7 @@ public class App {
         String[] duomenai = readLines(failas);
         ArrayList<Struct> tmp = new ArrayList<>();
         for(int i = 0; i < duomenai.length; i++){
-            if(duomenai[i].charAt(0) == ' '){
+            if("".equals(duomenai[i])){
             	ret.add(tmp);
             	tmp = new ArrayList<>();
             }else{
@@ -73,7 +73,7 @@ public class App {
     }
     
     public void spausdinti(ArrayList<Struct> duomenai, String prefix){
-        System.out.print(antraste());
+        System.out.println();
         for(int i = 0; i < duomenai.size(); i++)
             System.out.println(prefix + i + " " + duomenai.get(i).toString());
     }
@@ -83,26 +83,21 @@ public class App {
     	final int procesuSkaicius = duomenys.size();
 
         List<Thread> procesai = new ArrayList<>(procesuSkaicius);
-        antraste();
-        for(ArrayList<Struct> a : duomenys)
-        	spausdinti(a, "");
+        for(int i = 0; i < procesuSkaicius; i++)
+        	spausdinti(duomenys.get(i), "Procesas " + i + " ");
         System.out.print("\n\n\n");
         for(int i = 0; i < procesuSkaicius; i++){
             procesai.add(new Thread(new SuperRunnable(i) {
 
                 @Override
                 public void run() {
-                    spausdinti(duomenys.get(getNr()), "Procesas " + getNr());
+                    spausdinti(duomenys.get(getNr()), "Procesas " + getNr() + " ");
                 }
             }));
         }
         for(Thread t : procesai){
             t.start();
         }
-    }
-    
-    public static String antraste(){
-            return String.format("%22s, %5s, %10s\n", Struct.PAV, Struct.KIEKIS, Struct.KAINA);
     }
     
     public static void main(String[] args) {
