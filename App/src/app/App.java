@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+//1. atsitiktini kieki
+//2. tokia, kokia startuoja
+
 public class App {
     private class Struct{
         public String pav;
